@@ -6,6 +6,7 @@ import click
 import json
 import logging
 import requests
+import os
 
 
 @click.command()
@@ -23,20 +24,24 @@ def cli(dataset_name, bucket, prefix, filetype):
     for obj in get_s3_records(bucket, prefix):
         s3_path = "https://{}.s3.amazonaws.com/{}".format(bucket, obj.key)
 
-        if first:
-            dataset_id = _create_dataset(dataset_name, s3_path)
-            get_task_log(dataset_id)
-            new_count = get_record_count(dataset_id)
-            logging.info("{} records added".format(new_count - count))
-            count = new_count
-            first = False
-        else:
-            count = concatenate_records(dataset_id, s3_path, filetype, count)
+        filename, file_extension = os.path.splitext(s3_path)
+        if file_extension == ".{}".format(filetype):
+            if first:
+                dataset_id = _create_dataset(dataset_name, s3_path)
+                logging.info("Dataset ID: {}".format(dataset_id))
+                get_task_log(dataset_id)
+                new_count = get_record_count(dataset_id)
+                logging.info("{} records added".format(new_count - count))
+                count = new_count
+                first = False
+            else:
+                count = concatenate_records(dataset_id, s3_path, filetype, count)
 
 
 def _create_dataset(dataset_name, record):
 
     logging.info("Create dataset " + dataset_name)
+    logging.info("Upload " + record)
 
     url = "https://production-api.globalforestwatch.org/v1/dataset/"
 
