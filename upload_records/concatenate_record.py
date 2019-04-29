@@ -15,7 +15,7 @@ TOKEN = json.loads(get_api_token())["token"]
 @click.argument("dataset")
 @click.argument("bucket")
 @click.option("--prefix", default="/", help="Folder inside bucket containing records")
-@click.option("--filetype", default="txt")
+@click.option("--filetype", default="json")
 def cli(dataset, bucket, prefix, filetype):
 
     logger = _get_logger(dataset)
