@@ -4,7 +4,7 @@
 
 `pip install git+https://github.com/wri/upload_records.git`
 
-# concatenate records to existing dataset
+# Concatenate records to existing dataset
 
 `concatenate_record DATASET BUCKET [--prefix FILEPREFIX] [--filetype FILEXTENTION]`
 
