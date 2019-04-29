@@ -8,8 +8,6 @@ import os
 import json
 import logging
 
-TOKEN = json.loads(get_api_token())["token"]
-
 
 @click.command()
 @click.argument("dataset")
@@ -58,9 +56,10 @@ def _concatenate_record(dataset, record):
     click.echo("Concatenate record " + record)
 
     url = "https://production-api.globalforestwatch.org/v1/dataset/{}/concat".format(dataset)
+    token = json.loads(get_api_token())["token"]
 
     headers = {"Content-Type": "application/json",
-               "Authorization": "Bearer {}".format(TOKEN)
+               "Authorization": "Bearer {}".format(token)
              }
 
     payload = {"connectorType": "document",
@@ -78,5 +77,5 @@ def _concatenate_record(dataset, record):
                         "Message: {}".format(r.status_code, r.json))
 
 
-
-
+if __name__ == "__main__":
+    cli()
