@@ -60,7 +60,7 @@ def _concatenate_record(dataset, record):
     url = "https://production-api.globalforestwatch.org/v1/dataset/{}/concat".format(dataset)
 
     headers = {"Content-Type": "application/json",
-               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NzUwYTU2ZGZjNjQzNzIyYmRkMDJhYiIsInJvbGUiOiJBRE1JTiIsInByb3ZpZGVyIjoibG9jYWwiLCJlbWFpbCI6InRtYXNjaGxlckB3cmkub3JnIiwiZXh0cmFVc2VyRGF0YSI6eyJhcHBzIjpbInJ3IiwiZ2Z3IiwicHJlcCIsImFxdWVkdWN0IiwiZm9yZXN0LWF0bGFzIiwiZGF0YTRzZGdzIiwiZ2Z3LWNsaW1hdGUiLCJnZnctcHJvIiwiZ2hnLWdkcCJdfSwiY3JlYXRlZEF0IjoxNTUxODQzNTk4NjYxLCJpYXQiOjE1NTE4NDM1OTh9.CLwZgQcm_j-S3jkXbbbL0vPoL2xvpH4b2q4BQbm2o8Q"#.format(TOKEN)
+               "Authorization": "Bearer {}".format(TOKEN)
              }
 
     payload = {"connectorType": "document",
