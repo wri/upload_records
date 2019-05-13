@@ -14,7 +14,8 @@ import os
 @click.argument("bucket")
 @click.option("--prefix", default="/", help="Folder inside bucket containing records")
 @click.option("--filetype", default="json")
-def cli(dataset_name, bucket, prefix, filetype):
+@click.option("--env", default="production")
+def cli(dataset_name, bucket, prefix, filetype, env):
 
     get_logger(get_logfile(dataset_name))
     first = True
@@ -27,25 +28,25 @@ def cli(dataset_name, bucket, prefix, filetype):
         filename, file_extension = os.path.splitext(s3_path)
         if file_extension == ".{}".format(filetype):
             if first:
-                dataset_id = _create_dataset(dataset_name, s3_path)
+                dataset_id = _create_dataset(dataset_name, s3_path, env)
                 logging.info("Dataset ID: {}".format(dataset_id))
-                get_task_log(dataset_id)
-                new_count = get_record_count(dataset_id)
+                get_task_log(dataset_id, env)
+                new_count = get_record_count(dataset_id, env)
                 logging.info("{} records added".format(new_count - count))
                 count = new_count
                 first = False
             else:
-                count = concatenate_records(dataset_id, s3_path, filetype, count)
+                count = concatenate_records(dataset_id, s3_path, filetype, count, env)
 
 
-def _create_dataset(dataset_name, record):
+def _create_dataset(dataset_name, record, env="production"):
 
     logging.info("Create dataset " + dataset_name)
     logging.info("Upload " + record)
 
-    url = "https://production-api.globalforestwatch.org/v1/dataset/"
+    url = "https://{}-api.globalforestwatch.org/v1/dataset/".format(env)
 
-    token = json.loads(get_api_token())["token"]
+    token = get_api_token(env)
 
     headers = {
         "Content-Type": "application/json",
@@ -60,8 +61,66 @@ def _create_dataset(dataset_name, record):
         "overwrite": True,
         "application": ["gfw"],
         "legend": {
-            "nested": ["year_data"]
-        },  # TODO: this should be hard coded. Find better way to pass in dataset attributes
+          "keyword": [
+            "iso",
+            "tcs",
+            "global_land_cover",
+            "erosion",
+            "wdpa",
+            "plantations",
+            "river_basin",
+            "ecozone",
+            "water_stress",
+            "rspo",
+            "idn_land_cover",
+            "mex_forest_zoning",
+            "per_forest_concession",
+            "bra_biomes"
+          ],
+          "integer": [
+            "threshold",
+            "ifl"
+          ],
+          "boolean": [
+            "primary_forest",
+            "idn_primary_forest",
+            "biodiversity_significance",
+            "biodiversity_intactness",
+            "aze",
+            "urban_watershed",
+            "mangroves_1996",
+            "mangroves_2016",
+            "endemic_bird_area",
+            "tiger_cl",
+            "landmark",
+            "land_right",
+            "kba",
+            "mining",
+            "oil_palm",
+            "idn_forest_moratorium",
+            "mex_protected_areas",
+            "mex_pes",
+            "per_production_forest",
+            "per_protected_area",
+            "wood_fiber",
+            "resource_right",
+            "managed_forests",
+            "oil_gas"
+          ],
+          "double": [
+            "total_area",
+            "extent_2000",
+            "extent_2010",
+            "total_gain",
+            "total_biomass",
+            "avg_biomass_per_ha",
+            "total_co2",
+            "total_mangrove_biomass",
+            "avg_mangrove_biomass_per_ha",
+            "total_mangrove_co2"
+          ],
+          "nested": ["year_data"]
+        },  # TODO: this shouldn't be hard coded. Find better way to pass in dataset attributes
     }
 
     r = requests.post(url, data=json.dumps(payload), headers=headers)

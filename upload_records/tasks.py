@@ -6,16 +6,16 @@ import logging
 
 
 @retry(wait_fixed=2000)
-def get_task_log(dataset):
+def get_task_log(dataset, env="production"):
 
-    url = "https://production-api.globalforestwatch.org/v1/dataset/{}".format(dataset)
+    url = "https://{}-api.globalforestwatch.org/v1/dataset/{}".format(env, dataset)
     r = requests.get(url)
     r_json = json.loads(r.text)
     status = r_json["data"]["attributes"]["status"]
 
     if status == "saved":
         task_id = r_json["data"]["attributes"]["taskId"]
-        url = os.path.join("https://production-api.globalforestwatch.org" + task_id)
+        url = "https://{}-api.globalforestwatch.org{}".format(env, task_id)
         logging.info("Task: " + url)
         r = requests.get(url)
         r_json = json.loads(r.text)
@@ -38,9 +38,10 @@ def get_task_log(dataset):
         raise Exception("Dataset not saved")
 
 
-def get_record_count(dataset):
-    url = "https://production-api.globalforestwatch.org/v1/query/{}?sql=select count(*) from table".format(
-        dataset
+@retry(wait_fixed=2000)
+def get_record_count(dataset, env="production"):
+    url = "https://{}-api.globalforestwatch.org/v1/query/{}?sql=select count(*) from table".format(
+        env, dataset
     )
     r = requests.get(url)
     r_json = json.loads(r.text)

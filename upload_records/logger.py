@@ -29,6 +29,7 @@ def get_logger(logfile, debug=False):
     """
 
     root = logging.getLogger()
+    # root.setLevel(logging.DEBUG)
     root.setLevel(logging.INFO)
 
     formatter = logging.Formatter(
@@ -38,7 +39,7 @@ def get_logger(logfile, debug=False):
     sh = logging.StreamHandler(sys.stdout)
     fh = logging.FileHandler(logfile)
 
-    #sh.setLevel(logging.DEBUG)
+    # sh.setLevel(logging.DEBUG)
     fh.setLevel(logging.INFO)
 
     sh.setFormatter(formatter)
