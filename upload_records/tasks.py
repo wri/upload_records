@@ -6,8 +6,10 @@ from upload_records.errors import DatasetFailedError, DatasetPendingError
 
 
 def retry_if_pending(exception):
-    """Return True if we should retry (in this case when it's an IOError), False otherwise"""
-    return isinstance(exception, DatasetPendingError)
+    """Return True if we should retry
+    In this case if the dataset is still pending
+    or if the gateway times out and returns an expected results which usually causes a KeyError"""
+    return isinstance(exception, (DatasetPendingError, KeyError))
 
 
 @retry(retry_on_exception=retry_if_pending, wait_fixed=2000)
