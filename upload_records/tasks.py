@@ -1,11 +1,16 @@
 from retrying import retry
 import requests
-import os
 import json
 import logging
+from upload_records.errors import DatasetFailedError, DatasetPendingError
 
 
-@retry(wait_fixed=2000)
+def retry_if_pending(exception):
+    """Return True if we should retry (in this case when it's an IOError), False otherwise"""
+    return isinstance(exception, DatasetPendingError)
+
+
+@retry(retry_on_exception=retry_if_pending, wait_fixed=2000)
 def get_task_log(dataset, env="production"):
 
     url = "https://{}-api.globalforestwatch.org/v1/dataset/{}".format(env, dataset)
@@ -33,9 +38,10 @@ def get_task_log(dataset, env="production"):
                     + ": "
                     + log["error"]
                 )
-
+    if status == "pending":
+        raise DatasetPendingError("Dataset still pending.")
     else:
-        raise Exception("Dataset not saved")
+        raise DatasetFailedError("Dataset upload failed.")
 
 
 @retry(wait_fixed=2000)
@@ -48,3 +54,4 @@ def get_record_count(dataset, env="production"):
     count = r_json["data"][0]["COUNT(*)"]
     logging.info("Number of records: {}".format(count))
     return count
+

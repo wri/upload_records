@@ -23,15 +23,15 @@ def cli(dataset, bucket, prefix, filetype, env):
 
     for obj in get_s3_records(bucket, prefix):
         s3_path = "https://{}.s3.amazonaws.com/{}".format(bucket, obj.key)
-        count = concatenate_records(dataset, s3_path, filetype, count, env)
+        count = append_records(dataset, s3_path, filetype, count, env)
 
 
-def concatenate_records(dataset, file_url, filetype, count=0, env="production"):
+def append_records(dataset, file_url, filetype, count=0, env="production"):
 
     filename, file_extension = os.path.splitext(file_url)
     if file_extension == ".{}".format(filetype):
         logging.info("Upload " + file_url)
-        _concatenate_records(dataset, file_url, env)
+        _append_records(dataset, file_url, env)
         time.sleep(5)  # Give API some time to update status
         get_task_log(dataset, env)
         new_count = get_record_count(dataset, env)
@@ -44,11 +44,11 @@ def concatenate_records(dataset, file_url, filetype, count=0, env="production"):
 
 
 @retry(wait_fixed=2000)
-def _concatenate_records(dataset, record, env="production"):
+def _append_records(dataset, record, env="production"):
 
-    logging.debug("Concatenate record " + record)
+    logging.debug("Append record " + record)
 
-    url = "https://{}-api.globalforestwatch.org/v1/dataset/{}/concat".format(env,
+    url = "https://{}-api.globalforestwatch.org/v1/dataset/{}/append".format(env,
         dataset
     )
     token = get_api_token(env)

@@ -1,6 +1,6 @@
 from upload_records.logger import get_logfile, get_logger
 from upload_records.aws import get_api_token, get_s3_records
-from upload_records.concatenate import concatenate_records
+from upload_records.append import append_records
 from upload_records.tasks import get_task_log, get_record_count
 import click
 import json
@@ -35,7 +35,7 @@ def cli(dataset_name, bucket, prefix, filetype, env):
                 count = new_count
                 first = False
             else:
-                count = concatenate_records(dataset_id, s3_path, filetype, count, env)
+                count = append_records(dataset_id, s3_path, filetype, count, env)
 
 
 def _create_dataset(dataset_name, record, env="production"):
@@ -102,9 +102,6 @@ def _create_dataset(dataset_name, record, env="production"):
             ],
             "integer": [
                 "threshold",
-            ],
-            "boolean": [
-
             ],
             "double": [
                 "total_area",
