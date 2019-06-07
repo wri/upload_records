@@ -1,6 +1,6 @@
 class DatasetFailedError(Exception):
     """Exception raised for when dataset update failed."""
-   pass
+    pass
 
 
 class DatasetPendingError(Exception):
