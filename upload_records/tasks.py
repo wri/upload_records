@@ -40,10 +40,12 @@ def get_task_log(dataset, env="production"):
                     + ": "
                     + log["error"]
                 )
-    if status == "failed":
+    elif status == "failed":
         raise DatasetFailedError("Dataset upload failed.")
-    else:
+    elif status == "pending":
         raise DatasetPendingError("Dataset still pending.")
+    else:
+        raise Exception("Dataset in unknown state: " + status)
 
 
 @retry(wait_fixed=2000)
