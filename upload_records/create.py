@@ -74,7 +74,9 @@ def _create_dataset(dataset_name, record, env="production"):
                 "idn_land_cover",
                 "mex_forest_zoning",
                 "per_forest_concession",
-                "bra_biomes",
+                "bra_biomes"
+            ],
+            "boolean": [
                 "primary_forest",
                 "idn_primary_forest",
                 "biodiversity_significance",
@@ -131,3 +133,7 @@ def _create_dataset(dataset_name, record, env="production"):
     dataset_id = r_json["data"]["id"]
 
     return dataset_id
+
+
+if __name__ == "__main__":
+    cli()
