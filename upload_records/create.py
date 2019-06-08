@@ -7,6 +7,7 @@ import json
 import logging
 import requests
 import os
+import time
 
 
 @click.command()
@@ -35,6 +36,7 @@ def cli(dataset_name, bucket, prefix, filetype, env):
                 count = new_count
                 first = False
             else:
+                time.sleep(300)
                 count = append_records(dataset_id, s3_path, filetype, count, env)
 
 

@@ -36,16 +36,16 @@ def get_logger(logfile, debug=False):
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
-    # sh = logging.StreamHandler(sys.stdout)
+    sh = logging.StreamHandler(sys.stdout)
     fh = logging.FileHandler(logfile)
 
     # sh.setLevel(logging.DEBUG)
     fh.setLevel(logging.INFO)
 
-    # sh.setFormatter(formatter)
+    sh.setFormatter(formatter)
     fh.setFormatter(formatter)
 
-    # root.addHandler(sh)
+    root.addHandler(sh)
     root.addHandler(fh)
 
     return root
