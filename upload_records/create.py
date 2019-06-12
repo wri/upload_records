@@ -36,7 +36,8 @@ def cli(dataset_name, bucket, prefix, filetype, env):
                 count = new_count
                 first = False
             else:
-                time.sleep(300)
+                logging.info("Sleep for 60 sec")
+                time.sleep(60)
                 count = append_records(dataset_id, s3_path, filetype, count, env)
 
 
@@ -76,9 +77,7 @@ def _create_dataset(dataset_name, record, env="production"):
                 "idn_land_cover",
                 "mex_forest_zoning",
                 "per_forest_concession",
-                "bra_biomes"
-            ],
-            "boolean": [
+                "bra_biomes",
                 "primary_forest",
                 "idn_primary_forest",
                 "biodiversity_significance",
