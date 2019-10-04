@@ -9,7 +9,7 @@ setup(
     entry_points={
         "console_scripts": [
             "create_dataset=upload_records.create:cli",
-            "concatenate_records=upload_records.concatenate:cli",
+            "append_records=upload_records.append:cli",
         ]
     },
 )
