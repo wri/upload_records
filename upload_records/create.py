@@ -1,16 +1,14 @@
 from upload_records.logger import get_logfile, get_logger
 from upload_records.aws import get_api_token, get_s3_records
-from upload_records.append import append_records
 from upload_records.tasks import get_task_log, get_record_count
-import upload_records.schemas as schemas
-import boto3
+import upload_records.schemas.glad as glad
+import upload_records.schemas.carbonflux as carbonflux
+import upload_records.schemas.annualupdate as annualupdate
 import click
-import importlib
 import json
 import logging
 import requests
 import os
-import time
 
 
 @click.command()
@@ -22,11 +20,10 @@ import time
 @click.option("--env", default="production")
 def cli(dataset_name, bucket, prefix, filetype, schema, env):
     get_logger(get_logfile(dataset_name))
-    # first = True
-    dataset_id = None
+
     count = 0
 
-    legend_schema = getattr(schemas, schema)
+    legend_schema = _get_schema(schema)
 
     records = list()
     for obj in get_s3_records(bucket, prefix):
@@ -80,6 +77,16 @@ def _create_dataset(dataset_name, records, schema, env="production"):
     dataset_id = r_json["data"]["id"]
 
     return dataset_id
+
+
+def _get_schema(schema):
+
+    schemas = [annualupdate, carbonflux, glad]
+    for s in schemas:
+        if hasattr(s, schema):
+            return getattr(s, schema)
+
+    raise ValueError("No such schema defined")
 
 
 if __name__ == "__main__":

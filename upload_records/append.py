@@ -22,10 +22,13 @@ def cli(dataset, bucket, prefix, filetype, env):
     count = get_record_count(dataset, env)
 
     for obj in get_s3_records(bucket, prefix):
-        s3_path = "https://{}.s3.amazonaws.com/{}".format(bucket, obj.key)
-        count = append_records(dataset, s3_path, filetype, count, env)
-        logging.info("Sleep for 60 sec")
-        time.sleep(60)
+        f_number = int(os.path.basename(obj.key).split("-")[2].split(".")[0])
+        if f_number > 53:
+
+            s3_path = "https://{}.s3.amazonaws.com/{}".format(bucket, obj.key)
+            count = append_records(dataset, s3_path, filetype, count, env)
+            logging.info("Sleep for 60 sec")
+            time.sleep(60)
 
 
 def append_records(dataset, file_url, filetype, count=0, env="production"):
