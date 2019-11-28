@@ -2,7 +2,6 @@ from copy import deepcopy
 
 _annualupdate_minimum = {
     "keyword": [
-        "iso",
         "tcs_driver__type",
         "global_land_cover__class",
         "is__regional_primary_forest",
@@ -46,8 +45,18 @@ _annualupdate_minimum = {
 }
 
 annualupdate_minimum_change_iso = deepcopy(_annualupdate_minimum)
+annualupdate_minimum_change_iso["keyword"].append("iso")
 annualupdate_minimum_change_iso["integer"].append("treecover_loss__year")
 annualupdate_minimum_change_iso["double"] = [
+    "treecover_loss__ha",
+    "aboveground_biomass_loss__Mg",
+    "aboveground_co2_emissions__Mg",
+]
+
+annualupdate_minimum_change_geostore = deepcopy(_annualupdate_minimum)
+annualupdate_minimum_change_geostore["keyword"].append("geostore_id")
+annualupdate_minimum_change_geostore["integer"].append("treecover_loss__year")
+annualupdate_minimum_change_geostore["double"] = [
     "treecover_loss__ha",
     "aboveground_biomass_loss__Mg",
     "aboveground_co2_emissions__Mg",
@@ -60,7 +69,22 @@ annualupdate_minimum_change_adm2 = deepcopy(annualupdate_minimum_change_adm1)
 annualupdate_minimum_change_adm2["keyword"].append("adm2")
 
 annualupdate_minimum_summary_iso = deepcopy(_annualupdate_minimum)
+annualupdate_minimum_summary_iso["keyword"].append("iso")
 annualupdate_minimum_summary_iso["double"] = [
+    "treecover_extent_2000__ha",
+    "treecover_extent_2010__ha",
+    "area__ha",
+    "treecover_gain_2000-2012__ha",
+    "aboveground_biomass_stock_2000__Mg",
+    "aboveground_co2_stock_2000__Mg",
+    "treecover_loss_2001-2018__ha",
+    "aboveground_biomass_loss_2001-2018__Mg",
+    "aboveground_co2_emissions_2001-2018__Mg",
+]
+
+annualupdate_minimum_summary_geostore = deepcopy(_annualupdate_minimum)
+annualupdate_minimum_summary_geostore["keyword"].append("geostore")
+annualupdate_minimum_summary_geostore["double"] = [
     "treecover_extent_2000__ha",
     "treecover_extent_2010__ha",
     "area__ha",

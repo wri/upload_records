@@ -21,7 +21,7 @@ _glad = {
         "per_forest_concession__type",
         "is__gfw_oil_gas",
         "is__mangroves_2016",
-        "intact_forest_landscapes_2016",
+        "is__intact_forest_landscapes_2016",
         "bra_biome__name",
     ]
 }
@@ -47,6 +47,9 @@ glad_summary_wdpa["keyword"].append("name")
 glad_summary_wdpa["keyword"].append("iucn_cat")
 glad_summary_wdpa["keyword"].append("status")
 
+glad_summary_geostore = deepcopy(_glad_summary)
+glad_summary_geostore["keyword"].append("geostore_id")
+
 glad_change_daily_adm2 = deepcopy(_glad_change)
 glad_change_daily_adm2["keyword"].append("alert__date")
 glad_change_daily_adm2["keyword"].append("adm1")
@@ -69,6 +72,10 @@ glad_change_daily_wdpa["keyword"].append("name")
 glad_change_daily_wdpa["keyword"].append("iucn_cat")
 glad_change_daily_wdpa["keyword"].append("status")
 
+glad_change_daily_geostore = deepcopy(_glad_change)
+glad_change_daily_geostore["keyword"].append("alert__date")
+glad_change_daily_geostore["keyword"].append("geostore_id")
+
 glad_change_weekly_wdpa = deepcopy(_glad_change)
 glad_change_weekly_wdpa["keyword"].append("alert__year")
 glad_change_weekly_wdpa["keyword"].append("alert__week")
@@ -76,3 +83,8 @@ glad_change_weekly_wdpa["keyword"].append("wdpa_id")
 glad_change_weekly_wdpa["keyword"].append("name")
 glad_change_weekly_wdpa["keyword"].append("iucn_cat")
 glad_change_weekly_wdpa["keyword"].append("status")
+
+glad_change_weekly_geostore = deepcopy(_glad_change)
+glad_change_weekly_geostore["keyword"].append("alert__year")
+glad_change_weekly_geostore["keyword"].append("alert__week")
+glad_change_weekly_geostore["keyword"].append("geostore_id")
